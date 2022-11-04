@@ -99,6 +99,7 @@ for filename in S*.fasta
 ```
 nano positionslst.sh
 ```
+```
 #!/bin/sh
 for filename in S*blast
         do
@@ -120,5 +121,9 @@ for filename in S*position.lst
 	cut -f 1,3,4 ${filename} | sort | uniq > ${basename}positionfinal.lst
         done
         
+```
+
+```
+sh positionlst.sh
 ```
  
