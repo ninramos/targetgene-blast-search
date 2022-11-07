@@ -1,5 +1,4 @@
 ## Blasting with target gene of interest
-The following describes the pipeline for using blast with target enrichment data to search for and extract luciferase genes for bioinformatic analysis. 
 
 
 1. To run blast, first create a built blast database with target enrichment data for luciferase (exon 129)
