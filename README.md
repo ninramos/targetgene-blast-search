@@ -38,7 +38,7 @@ blastn -db <blastdb> -query <query fastas> -outfmt 6 -evalue 1e-5 -out <output f
  mv *blast blastresults/
  ```
  
- In a directory with all blastresults, create list with all unique hits with **makelst.sh**
+ In a directory with all blastresults, create a list of all unique hits with **makelst.sh**
  
  ```
  nano makelst.sh
@@ -60,7 +60,7 @@ for filename in S*blast
 ```
 sh makelst.sh
 ```
-4. pull blast hit sequences from contig files with blast_hits.sh
+4. Pull the blast hit sequences using the unique hits list from contig files with blast_hits.sh
   
 ```
 nano blast_hits.sh
@@ -72,8 +72,12 @@ nano blast_hits.sh
 for filename in S*blast
         do
         basename=$(basename ${filename} blast)
-        seqtk subseq /scratch/nmnh_corals/quattrinia/analysis/genomeskims/Jul2022/spades-assemblies/${basename}.contigs.fasta /scratch/nmnh_corals/ramosn/luciferase_analysis/genome_skim_blast/blastresults/${basename}.lst > ${basename}.fasta 
+        seqtk subseq ${basename}.contigs.fasta ${basename}.lst > ${basename}.fasta 
         done
+```
+
+```
+sh blast_hits.sh 
 ```
 
 concatenate all pulled sequences into one file
