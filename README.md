@@ -1,43 +1,28 @@
 ## Blasting with target gene of interest
-The following describes the pipeline for using blast to search for and extract luciferase genes for bioinformatic analysis. 
+The following describes the pipeline for using blast with target enrichment data to search for and extract luciferase genes for bioinformatic analysis. 
 
 
-1. To run blast, first create a blast database: 
-
-Move all contig files into their own directory to build local blast database. 
+1. To run blast, first create a built blast database with target enrichment data for luciferase (exon 129)
 
 ```
 mkdir -p blastdb 
-mv *.contigs.fasta blastdb/
-nano make_blast_db.sh
-```
+mv 129exon.fasta blastdb/
+cd blastdb/ 
 
-```
-##make_blast_db.sh
+makeblastdb -in 129exon.fasta -dbtype nucl -out luciferasedb
 
-#!/bin/sh
-for filename in *.contigs.fasta
-        do
-        name=$(basename $filename .contigs.fasta) #creates a variable "name"
-        makeblastdb -dbtype nucl -in $filename -out $name #makes local BLAST database
-        done
- ```
- Create blast database with **make_blast_db.sh** from the contigs. 
- 
- ```
- sh make_blast_db.sh
  ```
  
- 2. Move to directory with query sequences you wish to blast with newly made blastdb and run blastn
+ 2. Move to directory with query sequences (S***.contigs.fasta) you wish to blast with luciferasedb and run blastn
  
  ```
-blastn -db <blastdb> -query <query fastas> -outfmt 6 -evalue 1e-5 -out <output filename>
+blastn -db <luciferasedb> -query <query fastas> -outfmt 6 -evalue 1e-5 -out <output filename(S*blast)>
 ```
 
  Move all blast results to one directory 
  
  ```
- mv *blast blastresults/
+ mv S*blast blastresults/
  
  ```
  
@@ -117,8 +102,12 @@ nano rename.sh
 for filename in S*.fasta
         do 
         basename=$(basename ${filename} .fasta)
-        sed "s+>+>${basename}_+g" "$filename" >> ${basename}renamed.fasta
+        sed "s+>+>${basename}_+g" "$filename" >> ${basename}named.fasta
         done
+```
+
+```
+cat *named.fasta >> all_luciferase_seq_named.fasta
 ```
 
 ## Trim sequences to specific blast hit region
@@ -175,4 +164,13 @@ cat S*name-position.lst >> luciferase_namepositions.lst
 ```
 sh positionlst.sh
 ```
+
+> **luciferase_namepositions.lst** is a tab deliminated file with the start stop positions according to blast, column 1 headers in this file need to be exact to those in the fasta sequences file
+
+2. Use bedtools to extract region of genome contig/node sequence that blasted to luciferases
+
+```
+bedtools getfasta -fi all_luciferase_seq_named.fasta -bed luciferase_namepositions.lst -fo genomeskim_luciferases_extracted.fa
+```
+
  
