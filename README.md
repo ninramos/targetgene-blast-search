@@ -1,8 +1,8 @@
 ## Blasting with target gene of interest & extracting sequences from blast output 
 
-1. Create blast database: 
+1. To run blast, first create a blast database: 
 
-Move all contig files into their own directory to create blast database. 
+Move all contig files into their own directory to build local blast database. 
 
 ```
 mkdir -p blastdb 
@@ -18,7 +18,6 @@ for filename in *.contigs.fasta
         do
         name=$(basename $filename .contigs.fasta) #creates a variable "name"
         makeblastdb -dbtype nucl -in $filename -out $name #makes local BLAST database
-        mv $name.n* blastdb #moves new file to directory called “blastdb”
         done
  ```
  Create blast database with **make_blast_db.sh** from the contigs. 
@@ -27,13 +26,19 @@ for filename in *.contigs.fasta
  sh make_blast_db.sh
  ```
  
- 2. Move to directory with sequences you wish to blast with newly made blastdb and run blastn
+ 2. Move to directory with query sequences you wish to blast with newly made blastdb and run blastn
  
  ```
-blastn -db path/to/blastdb -query *.contigs.fasta -outfmt 6 -evalue 1e-5 -out path/to/output/blastresults
+blastn -db <blastdb> -query <query fastas> -outfmt 6 -evalue 1e-5 -out <output filename>
 ```
+
+ 3. Move all blast results to one directory 
  
- 3. In a directory with all blastresutls, create list with all unique hits with **makelst.sh**
+ ```
+ mv *blast blastresults/
+ ```
+ 
+ In a directory with all blastresults, create list with all unique hits with **makelst.sh**
  
  ```
  nano makelst.sh
