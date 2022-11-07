@@ -1,4 +1,4 @@
-## Blasting with target gene of interest
+## Blast with target gene of interest
 
 
 1. To run blast, first create a built blast database with target enrichment data for luciferase (exon 129)
