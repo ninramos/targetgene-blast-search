@@ -21,13 +21,6 @@ for filename in S*position1.lst
 	cut -f 1,3,4 ${filename} | sort | uniq > ${basename}positionfinal.lst
 	done
 
-#changes tabs to spaces  
-for filename in S*positionfinal.lst
-	do
-	basename=$(basename ${filename} positionfinal.lst)
-	sed -i $'s/\t/ /g' ${filename} 
-	done
-
 #renames NodeID to include Contig ID (i.e. S001)
 for filename in S*positionfinal.lst
         do
